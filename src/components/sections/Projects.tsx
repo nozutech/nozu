@@ -10,7 +10,7 @@ const STATUS_COLOR = "text-[#f97316] bg-[#f97316]/10 border-[#f97316]/20";
 const projectsMeta = [
   {
     tags: ["FastAPI", "Groq AI", "n8n", "PostgreSQL", "Docker", "Fly.io"],
-    github: "https://github.com/Noxiffow/threadbot-winowin",
+    github: "https://github.com/nozutech/threadbot",
     demo: null,
     video: "/videos/threadbot-demo.mp4",
     image: null,
@@ -18,7 +18,7 @@ const projectsMeta = [
   },
   {
     tags: ["Astro", "TypeScript", "CSS", "Vercel"],
-    github: "https://github.com/Noxiffow/syn924-artist-portfolio",
+    github: "https://github.com/nozutech/syn924-artist-portfolio",
     demo: null,
     video: null,
     image: "/images/project-artist-portfolio.png",
@@ -26,7 +26,7 @@ const projectsMeta = [
   },
   {
     tags: ["Node.js", "Express", "Apple Wallet", "Google Wallet", "APNs", "PWA", "Railway", "SQLite"],
-    github: "https://github.com/Noxiffow/loyalty-wallet",
+    github: "https://github.com/nozutech/loyalty-wallet",
     demo: null,
     video: null,
     image: "/images/project-loyalty-wallet.png",

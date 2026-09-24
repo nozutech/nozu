@@ -44,7 +44,7 @@ export function Contact() {
             jotadev@nozutech.dev
           </button>
           <a
-            href="https://github.com/Noxiffow"
+            href="https://github.com/nozutech"
             target="_blank"
             rel="noopener noreferrer"
             className="px-8 py-3.5 rounded-xl font-semibold text-sm border border-white/[0.1] text-[#a09890] hover:text-white hover:border-white/20 transition-all duration-200"

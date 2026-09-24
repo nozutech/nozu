@@ -70,8 +70,8 @@ const jsonLd = {
         "addressCountry": "ES"
       },
       "sameAs": [
-        "https://github.com/Noxiffow",
-        "https://noxiffow.github.io/nozu/"
+        "https://github.com/nozutech",
+        "https://nozutech.github.io/nozu/"
       ]
     },
     {
