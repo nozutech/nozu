@@ -3,11 +3,28 @@
 import { motion } from "framer-motion";
 import { useRef, useState, useEffect, useCallback } from "react";
 import { ShiftCard } from "@/components/ui/shift-card";
+import { SectionLabel, SecNum } from "@/components/ui/section-label";
 import { useLang } from "@/contexts/LanguageContext";
 
 const STATUS_COLOR = "text-[#f97316] bg-[#f97316]/10 border-[#f97316]/20";
 
 const projectsMeta = [
+  {
+    tags: ["Next.js", "TypeScript", "Tailwind", "Cloudflare Pages", "Workers", "SEO"],
+    github: null,
+    demo: "https://absolutoreformasyproyectos.com",
+    video: null,
+    image: "/images/project-absoluto-reformas.png",
+    statusColor: STATUS_COLOR,
+  },
+  {
+    tags: ["Node.js", "Express", "Apple Wallet", "Google Wallet", "APNs", "PWA", "Railway", "SQLite"],
+    github: "https://github.com/Noxiffow/loyalty-wallet",
+    demo: null,
+    video: null,
+    image: "/images/project-loyalty-wallet.png",
+    statusColor: STATUS_COLOR,
+  },
   {
     tags: ["FastAPI", "Groq AI", "n8n", "PostgreSQL", "Docker", "Fly.io"],
     github: "https://github.com/nozutech/threadbot",
@@ -25,11 +42,11 @@ const projectsMeta = [
     statusColor: STATUS_COLOR,
   },
   {
-    tags: ["Node.js", "Express", "Apple Wallet", "Google Wallet", "APNs", "PWA", "Railway", "SQLite"],
-    github: "https://github.com/nozutech/loyalty-wallet",
+    tags: ["Next.js", "Supabase", "TypeScript", "Tailwind", "Vercel"],
+    github: null,
     demo: null,
     video: null,
-    image: "/images/project-loyalty-wallet.png",
+    image: "/images/project-client-portal.png",
     statusColor: STATUS_COLOR,
   },
 ];
@@ -62,8 +79,15 @@ export function Projects() {
   };
 
   return (
-    <section id="proyectos" className="py-24">
-      <div className="max-w-5xl mx-auto px-6">
+    <section id="proyectos" className="py-24 relative overflow-hidden">
+      <div
+        aria-hidden
+        className="absolute top-0 left-0 w-[500px] h-[500px] pointer-events-none"
+        style={{ background: "radial-gradient(circle at 20% 30%, rgba(249,115,22,0.06) 0%, transparent 60%)" }}
+      />
+
+      <div className="max-w-5xl mx-auto px-6 relative">
+        <SecNum num="02" />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -71,13 +95,12 @@ export function Projects() {
           transition={{ duration: 0.5 }}
           className="mb-16"
         >
-          <p className="text-xs font-mono text-[#f97316] mb-3 tracking-widest uppercase">{projects.label}</p>
+          <SectionLabel>{projects.label}</SectionLabel>
           <h2 className="text-3xl md:text-4xl font-bold text-white">{projects.title}</h2>
         </motion.div>
       </div>
 
       <div className="relative">
-        {/* fade edge right */}
         <div className="absolute right-0 top-0 h-full w-20 bg-gradient-to-l from-[#0a0908] to-transparent pointer-events-none z-10" />
 
         <div
@@ -135,12 +158,14 @@ export function Projects() {
                   }
                   bottomContent={
                     <div className="flex items-center gap-3">
-                      <a href={meta.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs text-[#a09890] hover:text-white transition-colors">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
-                        </svg>
-                        {projects.code}
-                      </a>
+                      {meta.github && (
+                        <a href={meta.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs text-[#a09890] hover:text-white transition-colors">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+                          </svg>
+                          {projects.code}
+                        </a>
+                      )}
                       {meta.demo && (
                         <a href={meta.demo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs text-[#f97316] hover:text-[#fb923c] transition-colors font-medium">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -159,7 +184,6 @@ export function Projects() {
           })}
         </div>
 
-        {/* dot indicators */}
         <div className="flex justify-center gap-2 mt-8">
           {projects.items.map((_, i) => (
             <button

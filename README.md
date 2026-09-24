@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# nozutech.dev
 
-## Getting Started
+Sitio web de **NozuTech** — la marca freelance de [Jonathan Neto](https://github.com/nozutech).
+Desarrollo backend, automatización e integraciones con IA.
 
-First, run the development server:
+🌐 **En producción:** [nozutech.dev](https://nozutech.dev)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Qué hay dentro
+
+| Ruta | Descripción |
+|---|---|
+| `/` | Landing: servicios, proyectos y contacto |
+| `/scorecard/` | **Scorecard** — cuestionario de 7 preguntas sí/no que estima si un negocio necesita presencia web y qué le falta. Sin backend: la puntuación se calcula en el cliente |
+
+---
+
+## Stack
+
+```
+Framework    Next.js 16 (App Router, export estático)
+UI           React 19 · TypeScript · Tailwind CSS 4
+Componentes  class-variance-authority · clsx · tailwind-merge
+Animación    Framer Motion
+Iconos       Lucide
+Despliegue   GitHub Actions → GitHub Pages
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Sin base de datos, sin autenticación y sin servidor: todo el sitio se compila a HTML estático.
+Es deliberado — una web corporativa de este tamaño no necesita runtime, y así el coste de
+alojamiento es cero y no hay nada que se pueda caer.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Puesta en marcha
 
-## Learn More
+```bash
+npm install
+npm run dev      # http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+Otros comandos:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run build    # genera el sitio estático en ./out
+npm run start    # sirve la build de producción
+npm run lint     # ESLint con la config de Next
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Requiere **Node 22+** (es la versión que usa el pipeline de despliegue).
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Despliegue
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Automático: cada `push` a `main` dispara
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), que compila y publica en
+GitHub Pages. También se puede lanzar a mano desde la pestaña *Actions* (`workflow_dispatch`).
+
+La configuración relevante está en `next.config.ts`:
+
+```ts
+output: "export"        // exportación estática, sin servidor Node
+trailingSlash: true     // URLs con barra final, como espera GitHub Pages
+images: { unoptimized: true }   // el optimizador de Next necesita servidor
+```
+
+> ⚠️ Al ser un export estático **no están disponibles** las rutas de API, el renderizado en
+> servidor, ISR ni el middleware. Todo lo dinámico tiene que resolverse en el cliente o vivir
+> en un servicio aparte.
+
+---
+
+## Estructura
+
+```
+src/app/
+├── page.tsx              # landing
+├── scorecard/page.tsx    # cuestionario
+└── ...                   # layout, estilos y componentes compartidos
+public/                   # estáticos (imágenes, iconos, CNAME)
+```
+
+---
+
+*© 2026 Jonathan Neto · NozuTech*
