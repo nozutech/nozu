@@ -31,7 +31,7 @@ export function About() {
           <div className="flex items-center gap-4 mt-8">
             <span className="text-[#6b6560] text-sm">📍 {about.location}</span>
             <a
-              href="https://github.com/Noxiffow"
+              href="https://github.com/nozutech"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#6b6560] hover:text-[#f97316] text-sm transition-colors"

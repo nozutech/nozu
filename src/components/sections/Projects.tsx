@@ -19,7 +19,7 @@ const projectsMeta = [
   },
   {
     tags: ["Node.js", "Express", "Apple Wallet", "Google Wallet", "APNs", "PWA", "Railway", "SQLite"],
-    github: "https://github.com/Noxiffow/loyalty-wallet",
+    github: "https://github.com/nozutech/loyalty-wallet",
     demo: null,
     video: null,
     image: "/images/project-loyalty-wallet.png",
