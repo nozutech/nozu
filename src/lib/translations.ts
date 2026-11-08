@@ -83,6 +83,15 @@ export const translations = {
             "SEO técnico completo: datos estructurados (Schema.org), sitemap indexado y metadatos por página. De cero presencia en buscadores a indexación activa en Google Search Console.",
         },
         {
+          title: "The Usual",
+          subtitle: "Tarjetas de sellos digitales self-hosted",
+          description:
+            "El cliente se da de alta con un QR, el personal escanea su tarjeta y el sello aparece en su móvil al momento. Sin app, sin cuota mensual y sin terceros con los datos de tus clientes.",
+          status: "Código abierto",
+          detail:
+            "Pensado para quien no es de ordenadores: el panel es un buscador y un botón grande. Pase opcional en Google Wallet, se instala con Docker y tiene licencia AGPL-3.0.",
+        },
+        {
           title: "Loyalty Wallet",
           subtitle: "Tarjeta de fidelidad en Apple & Google Wallet",
           description:
@@ -293,6 +302,15 @@ export const translations = {
           status: "Live",
           detail:
             "Full technical SEO: structured data (Schema.org), indexed sitemap and per-page metadata. From zero search presence to active indexing in Google Search Console within days.",
+        },
+        {
+          title: "The Usual",
+          subtitle: "Self-hosted digital stamp cards",
+          description:
+            "Customers sign up with a QR code, staff scan their card and add a stamp, and the stamp appears on the customer's phone at once. No app to install, no monthly fee and no third party holding your customers' data.",
+          status: "Open source",
+          detail:
+            "Built for people who aren't computer people: the staff panel is a search box and one big button. Optional Google Wallet pass, Docker install and AGPL-3.0 license.",
         },
         {
           title: "Loyalty Wallet",

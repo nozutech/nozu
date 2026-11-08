@@ -18,6 +18,14 @@ const projectsMeta = [
     statusColor: STATUS_COLOR,
   },
   {
+    tags: ["Node.js", "Express", "SQLite", "Google Wallet", "Docker", "AGPL-3.0"],
+    github: "https://github.com/nozutech/theusual",
+    demo: null,
+    video: null,
+    image: "/images/project-theusual.png",
+    statusColor: STATUS_COLOR,
+  },
+  {
     tags: ["Node.js", "Express", "Apple Wallet", "Google Wallet", "APNs", "PWA", "Railway", "SQLite"],
     github: "https://github.com/nozutech/loyalty-wallet",
     demo: null,
