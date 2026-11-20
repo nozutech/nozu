@@ -13,6 +13,7 @@ type ProjectMeta = {
   video: string | null;
   image: string | null;
   live: boolean;
+  fit?: "contain";
 };
 
 const projectsMeta: ProjectMeta[] = [
@@ -23,6 +24,7 @@ const projectsMeta: ProjectMeta[] = [
     video: null,
     image: "/images/project-absoluto-reformas.png",
     live: true,
+    fit: "contain",
   },
   {
     tags: ["n8n", "JavaScript", "BOE API", "RSS", "Telegram", "MIT"],
@@ -39,6 +41,7 @@ const projectsMeta: ProjectMeta[] = [
     video: null,
     image: "/images/project-theusual.png",
     live: false,
+    fit: "contain",
   },
   {
     tags: ["Node.js", "Express", "Apple Wallet", "Google Wallet", "APNs", "PWA", "Railway", "SQLite"],
@@ -71,10 +74,15 @@ const projectsMeta: ProjectMeta[] = [
     video: null,
     image: "/images/project-client-portal.png",
     live: true,
+    fit: "contain",
   },
 ];
 
 const num = (i: number) => String(i + 1).padStart(2, "0");
+
+// Las capturas muy anchas se ven enteras; el resto llena el marco
+const imageFit = (meta: ProjectMeta) =>
+  meta.fit === "contain" ? "object-contain p-3" : "object-cover object-top";
 
 const FOCUS_RING =
   "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f97316] rounded-sm";
@@ -307,7 +315,7 @@ export function Projects() {
                                 src={meta.image}
                                 alt={project.title}
                                 decoding="async"
-                                className="absolute inset-0 h-full w-full object-cover object-top"
+                                className={`absolute inset-0 h-full w-full ${imageFit(meta)}`}
                               />
                             )
                           )}
@@ -356,7 +364,7 @@ export function Projects() {
                     alt={isActive ? project.title : ""}
                     aria-hidden={!isActive}
                     decoding="async"
-                    className={`absolute inset-0 h-full w-full object-cover object-top transition-opacity duration-300 ease-out ${
+                    className={`absolute inset-0 h-full w-full ${imageFit(meta)} transition-opacity duration-300 ease-out ${
                       isActive ? "opacity-100" : "opacity-0"
                     }`}
                   />
