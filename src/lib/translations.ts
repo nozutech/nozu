@@ -72,10 +72,12 @@ export const translations = {
       title: "Cosas que he construido",
       code: "Código",
       liveDemo: "Ver sitio",
+      count: "trabajos",
       items: [
         {
           title: "Absoluto Reformas",
           subtitle: "Rebrand y web corporativa desde cero",
+          kind: "Web",
           description:
             "Rediseño completo de plantilla genérica a web a medida. Formulario de presupuesto con traspaso automático de contexto entre páginas, galería de antes/después e identidad visual renovada.",
           status: "En producción",
@@ -83,8 +85,19 @@ export const translations = {
             "SEO técnico completo: datos estructurados (Schema.org), sitemap indexado y metadatos por página. De cero presencia en buscadores a indexación activa en Google Search Console.",
         },
         {
+          title: "Convenios al día",
+          subtitle: "Avisos de convenios colectivos del BOE y el BOCM",
+          kind: "Automatización",
+          description:
+            "Cada mañana revisa el BOE y el BOCM y avisa por Telegram cuando sale algo de los convenios que sigues: tablas salariales, revisiones, prórrogas o un convenio nuevo. Si no sale nada, no escribe.",
+          status: "En producción",
+          detail:
+            "Funciona con datos abiertos: la API del BOE y el RSS del BOCM. Saca el tipo de publicación del título y está probado con dos años de BOE. Sin claves de pago y con licencia MIT.",
+        },
+        {
           title: "The Usual",
           subtitle: "Tarjetas de sellos digitales self-hosted",
+          kind: "Sistema",
           description:
             "El cliente se da de alta con un QR, el personal escanea su tarjeta y el sello aparece en su móvil al momento. Sin app, sin cuota mensual y sin terceros con los datos de tus clientes.",
           status: "Código abierto",
@@ -94,6 +107,7 @@ export const translations = {
         {
           title: "Loyalty Wallet",
           subtitle: "Tarjeta de fidelidad en Apple & Google Wallet",
+          kind: "Sistema",
           description:
             "Sistema completo de tarjeta de fidelidad digital para negocios. Los clientes añaden la tarjeta a Apple o Google Wallet y reciben sellos automáticamente — sin instalar ninguna app.",
           status: "Completado",
@@ -103,6 +117,7 @@ export const translations = {
         {
           title: "ThreadBot",
           subtitle: "Asistente IA para e-commerce",
+          kind: "IA",
           description:
             "Chatbot conversacional completo para tienda de ropa. Catálogo interactivo, gestión de pedidos, control de stock y automatizaciones de email con n8n. Panel admin con estadísticas en tiempo real.",
           status: "Completado",
@@ -112,6 +127,7 @@ export const translations = {
         {
           title: "Portfolio Artista Digital",
           subtitle: "Portfolio para ilustrador de personajes",
+          kind: "Web",
           description:
             "Portfolio para artista de ilustración digital. Galería masonry con filtro de contenido, lightbox en desktop, toggle de preferencia y deploy en Vercel.",
           status: "Completado",
@@ -121,6 +137,7 @@ export const translations = {
         {
           title: "Client Portal",
           subtitle: "Panel de onboarding para clientes freelance",
+          kind: "Sistema",
           description:
             "Sistema de onboarding para nuevos clientes freelance. Cada cliente accede solo a su espacio — aislamiento real de datos con RLS a nivel de base de datos, no solo filtros en el frontend.",
           status: "En producción",
@@ -293,10 +310,12 @@ export const translations = {
       title: "Things I've built",
       code: "Code",
       liveDemo: "View site",
+      count: "projects",
       items: [
         {
           title: "Absoluto Reformas",
           subtitle: "Rebrand and corporate website from scratch",
+          kind: "Website",
           description:
             "Full redesign from generic template to a custom, conversion-focused site. Budget form with automatic context passing between pages, before/after gallery of real works and renewed visual identity.",
           status: "Live",
@@ -304,8 +323,19 @@ export const translations = {
             "Full technical SEO: structured data (Schema.org), indexed sitemap and per-page metadata. From zero search presence to active indexing in Google Search Console within days.",
         },
         {
+          title: "Convenios al día",
+          subtitle: "Collective agreement alerts from Spain's official gazettes",
+          kind: "Automation",
+          description:
+            "Every morning it checks the BOE and the BOCM and sends a Telegram alert when something about the collective agreements you follow is published: pay tables, revisions, extensions or a new agreement. If nothing comes out, it stays quiet.",
+          status: "Live",
+          detail:
+            "It runs on open data: the BOE API and the BOCM RSS feed. It reads the type of publication from the title and is tested against two years of BOE. No paid keys and an MIT license.",
+        },
+        {
           title: "The Usual",
           subtitle: "Self-hosted digital stamp cards",
+          kind: "System",
           description:
             "Customers sign up with a QR code, staff scan their card and add a stamp, and the stamp appears on the customer's phone at once. No app to install, no monthly fee and no third party holding your customers' data.",
           status: "Open source",
@@ -315,6 +345,7 @@ export const translations = {
         {
           title: "Loyalty Wallet",
           subtitle: "Loyalty card for Apple & Google Wallet",
+          kind: "System",
           description:
             "Complete digital loyalty card system for businesses. Clients add the card to Apple or Google Wallet and receive stamps automatically — no app required.",
           status: "Completed",
@@ -324,6 +355,7 @@ export const translations = {
         {
           title: "ThreadBot",
           subtitle: "AI assistant for e-commerce",
+          kind: "AI",
           description:
             "Full conversational chatbot for a clothing store. Interactive catalog, order management, stock control and email automations with n8n. Admin panel with real-time stats.",
           status: "Completed",
@@ -333,6 +365,7 @@ export const translations = {
         {
           title: "Digital Artist Portfolio",
           subtitle: "Portfolio for character illustrator",
+          kind: "Website",
           description:
             "Portfolio for a digital illustration artist. Masonry gallery with content filter, desktop lightbox, preference toggle and Vercel deploy.",
           status: "Completed",
@@ -342,6 +375,7 @@ export const translations = {
         {
           title: "Client Portal",
           subtitle: "Onboarding panel for freelance clients",
+          kind: "System",
           description:
             "Internal onboarding system for new freelance clients. Each client only accesses their own space — real data isolation with Row Level Security at the database level, not just frontend filters.",
           status: "Live",

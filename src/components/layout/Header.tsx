@@ -37,8 +37,9 @@ export function Header() {
       <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
         <a
           href="#"
-          className="font-bold text-lg tracking-tight text-white hover:text-[#f97316] transition-colors"
+          className="flex items-center gap-2.5 font-bold text-lg tracking-tight text-white hover:text-[#f97316] transition-colors"
         >
+          <img src="/nozutech-logo.svg" alt="" width={26} height={26} className="size-[26px]" />
           NozuTech
         </a>
 

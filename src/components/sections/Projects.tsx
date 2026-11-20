@@ -1,21 +1,36 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useRef, useState, useEffect, useCallback } from "react";
-import { ShiftCard } from "@/components/ui/shift-card";
+import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { ArrowUpRight } from "lucide-react";
 import { SectionLabel, SecNum } from "@/components/ui/section-label";
 import { useLang } from "@/contexts/LanguageContext";
 
-const STATUS_COLOR = "text-[#f97316] bg-[#f97316]/10 border-[#f97316]/20";
+type ProjectMeta = {
+  tags: string[];
+  github: string | null;
+  demo: string | null;
+  video: string | null;
+  image: string | null;
+  live: boolean;
+};
 
-const projectsMeta = [
+const projectsMeta: ProjectMeta[] = [
   {
     tags: ["Next.js", "TypeScript", "Tailwind", "Cloudflare Pages", "Workers", "SEO"],
     github: null,
     demo: "https://absolutoreformasyproyectos.com",
     video: null,
     image: "/images/project-absoluto-reformas.png",
-    statusColor: STATUS_COLOR,
+    live: true,
+  },
+  {
+    tags: ["n8n", "JavaScript", "BOE API", "RSS", "Telegram", "MIT"],
+    github: "https://github.com/nozutech/convenios-al-dia",
+    demo: null,
+    video: null,
+    image: "/images/project-convenios.png",
+    live: true,
   },
   {
     tags: ["Node.js", "Express", "SQLite", "Google Wallet", "Docker", "AGPL-3.0"],
@@ -23,7 +38,7 @@ const projectsMeta = [
     demo: null,
     video: null,
     image: "/images/project-theusual.png",
-    statusColor: STATUS_COLOR,
+    live: false,
   },
   {
     tags: ["Node.js", "Express", "Apple Wallet", "Google Wallet", "APNs", "PWA", "Railway", "SQLite"],
@@ -31,7 +46,7 @@ const projectsMeta = [
     demo: null,
     video: null,
     image: "/images/project-loyalty-wallet.png",
-    statusColor: STATUS_COLOR,
+    live: false,
   },
   {
     tags: ["FastAPI", "Groq AI", "n8n", "PostgreSQL", "Docker", "Fly.io"],
@@ -39,7 +54,7 @@ const projectsMeta = [
     demo: null,
     video: "/videos/threadbot-demo.mp4",
     image: null,
-    statusColor: STATUS_COLOR,
+    live: false,
   },
   {
     tags: ["Astro", "TypeScript", "CSS", "Vercel"],
@@ -47,7 +62,7 @@ const projectsMeta = [
     demo: null,
     video: null,
     image: "/images/project-artist-portfolio.png",
-    statusColor: STATUS_COLOR,
+    live: false,
   },
   {
     tags: ["Next.js", "Supabase", "TypeScript", "Tailwind", "Vercel"],
@@ -55,36 +70,127 @@ const projectsMeta = [
     demo: null,
     video: null,
     image: "/images/project-client-portal.png",
-    statusColor: STATUS_COLOR,
+    live: true,
   },
 ];
+
+const num = (i: number) => String(i + 1).padStart(2, "0");
+
+const FOCUS_RING =
+  "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f97316] rounded-sm";
+
+function Status({ label, live }: { label: string; live: boolean }) {
+  return (
+    <span className={`inline-flex items-center gap-2 font-mono text-xs ${live ? "text-[#f3a46b]" : "text-[#a09890]"}`}>
+      <span aria-hidden className={`size-[7px] rounded-full ${live ? "bg-[#f97316]" : "bg-[#5a5550]"}`} />
+      {label}
+    </span>
+  );
+}
+
+function Tags({ tags }: { tags: string[] }) {
+  return (
+    <ul className="flex flex-wrap gap-1.5">
+      {tags.map((tag) => (
+        <li
+          key={tag}
+          className="px-2 py-0.5 rounded-md text-[11px] font-mono text-[#958e87] bg-white/[0.025] border border-white/[0.07]"
+        >
+          {tag}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function Links({ meta, code, liveDemo }: { meta: ProjectMeta; code: string; liveDemo: string }) {
+  if (!meta.github && !meta.demo) return null;
+  return (
+    <div className="flex items-center gap-6">
+      {meta.demo && (
+        <a
+          href={meta.demo}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`inline-flex items-center gap-1 text-sm font-medium text-[#f97316] hover:text-[#fb923c] border-b border-[#f97316]/40 hover:border-[#fb923c] pb-0.5 transition-colors ${FOCUS_RING}`}
+        >
+          {liveDemo}
+          <ArrowUpRight aria-hidden size={15} strokeWidth={2} />
+        </a>
+      )}
+      {meta.github && (
+        <a
+          href={meta.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`inline-flex items-center gap-1.5 text-sm font-medium text-[#e8e3dc] hover:text-white border-b border-white/20 hover:border-white/60 pb-0.5 transition-colors ${FOCUS_RING}`}
+        >
+          <svg aria-hidden width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+          </svg>
+          {code}
+          <ArrowUpRight aria-hidden size={15} strokeWidth={2} />
+        </a>
+      )}
+    </div>
+  );
+}
 
 export function Projects() {
   const { t } = useLang();
   const { projects } = t;
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const updateActive = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el || !el.children.length) return;
-    const cardWidth = (el.children[0] as HTMLElement).offsetWidth + 24;
-    setActiveIndex(Math.round(el.scrollLeft / cardWidth));
-  }, []);
+  const reduceMotion = useReducedMotion();
+  const [active, setActive] = useState(0);
+  const rowRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const hoverTimer = useRef<number | null>(null);
+  const total = projects.items.length;
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    el.addEventListener("scroll", updateActive, { passive: true });
-    return () => el.removeEventListener("scroll", updateActive);
-  }, [updateActive]);
+    return () => {
+      if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
+    };
+  }, []);
 
-  const scrollTo = (i: number) => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const card = el.children[i] as HTMLElement;
-    el.scrollTo({ left: card.offsetLeft, behavior: "smooth" });
+  const clearHover = () => {
+    if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = null;
   };
+
+  // Solo con el visor (escritorio y ratón). La espera evita cambiar de proyecto al cruzar filas en diagonal
+  const hoverIn = (i: number) => {
+    if (!window.matchMedia("(min-width: 1024px) and (hover: hover) and (pointer: fine)").matches) return;
+    clearHover();
+    hoverTimer.current = window.setTimeout(() => setActive(i), 120);
+  };
+
+  const select = (i: number) => {
+    clearHover();
+    setActive(i);
+    if (window.matchMedia("(min-width: 1024px)").matches) return;
+    // En móvil, al cerrarse la fila de arriba la pulsada sube: la devolvemos a la vista
+    requestAnimationFrame(() => {
+      const el = rowRefs.current[i];
+      if (!el) return;
+      const top = el.getBoundingClientRect().top;
+      if (top < 72) window.scrollBy({ top: top - 80, behavior: reduceMotion ? "auto" : "smooth" });
+    });
+  };
+
+  const onListKey = (e: KeyboardEvent<HTMLOListElement>) => {
+    const current = rowRefs.current.findIndex((el) => el === document.activeElement);
+    if (current === -1) return;
+    let next = -1;
+    if (e.key === "ArrowDown") next = Math.min(current + 1, total - 1);
+    if (e.key === "ArrowUp") next = Math.max(current - 1, 0);
+    if (e.key === "Home") next = 0;
+    if (e.key === "End") next = total - 1;
+    if (next === -1) return;
+    e.preventDefault();
+    rowRefs.current[next]?.focus();
+  };
+
+  const current = projects.items[active];
+  const currentMeta = projectsMeta[active];
 
   return (
     <section id="proyectos" className="py-24 relative overflow-hidden">
@@ -101,109 +207,185 @@ export function Projects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mb-16"
+          className="mb-10 lg:mb-12 flex items-end justify-between gap-6"
         >
-          <SectionLabel>{projects.label}</SectionLabel>
-          <h2 className="text-3xl md:text-4xl font-bold text-white">{projects.title}</h2>
+          <div>
+            <SectionLabel>{projects.label}</SectionLabel>
+            <h2 className="text-3xl md:text-4xl font-bold text-white">{projects.title}</h2>
+          </div>
+          <p className="hidden md:block shrink-0 font-mono text-xs text-[#857e77] pb-1.5 tabular-nums">
+            {num(total - 1)} {projects.count}
+          </p>
         </motion.div>
-      </div>
 
-      <div className="relative">
-        <div className="absolute right-0 top-0 h-full w-20 bg-gradient-to-l from-[#0a0908] to-transparent pointer-events-none z-10" />
-
-        <div
-          ref={scrollRef}
-          className="flex gap-6 overflow-x-auto pb-2"
-          style={{
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-            paddingLeft: "max(24px, calc((100vw - 1024px) / 2 + 24px))",
-            paddingRight: "max(24px, calc((100vw - 1024px) / 2 + 24px))",
-          }}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="lg:grid lg:grid-cols-12 lg:gap-12 lg:items-start"
         >
-          {projects.items.map((project, i) => {
-            const meta = projectsMeta[i];
-            return (
-              <motion.div
-                key={project.title}
-                className="flex-shrink-0 w-[85vw] md:w-[440px]"
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.12 }}
-              >
-                <ShiftCard
-                  className="h-full"
-                  topContent={
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <h3 className="text-white font-semibold text-lg">{project.title}</h3>
-                        <p className="text-[#6b6560] text-xs mt-0.5">{project.subtitle}</p>
-                      </div>
-                      <span className={`shrink-0 text-[10px] font-mono px-2 py-0.5 rounded-full border ${meta.statusColor}`}>{project.status}</span>
-                    </div>
-                  }
-                  topAnimateContent={<p className="text-[#a09890] text-sm leading-relaxed">{project.detail}</p>}
-                  middleContent={
-                    <div>
-                      {meta.video && (
-                        <div className="mb-4 rounded-lg overflow-hidden border border-white/[0.06]">
-                          <video src={meta.video} autoPlay muted loop playsInline className="w-full max-h-48 object-cover" />
-                        </div>
-                      )}
-                      {!meta.video && meta.image && (
-                        <div className="mb-4 rounded-lg overflow-hidden border border-white/[0.06]">
-                          <img src={meta.image} alt="" className="w-full max-h-48 object-cover object-top" />
-                        </div>
-                      )}
-                      <p className="text-[#a09890] text-sm leading-relaxed mb-4">{project.description}</p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {meta.tags.map((tag) => (
-                          <span key={tag} className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-white/[0.04] text-[#6b6560] border border-white/[0.06]">{tag}</span>
-                        ))}
-                      </div>
-                    </div>
-                  }
-                  bottomContent={
-                    <div className="flex items-center gap-3">
-                      {meta.github && (
-                        <a href={meta.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs text-[#a09890] hover:text-white transition-colors">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
-                          </svg>
-                          {projects.code}
-                        </a>
-                      )}
-                      {meta.demo && (
-                        <a href={meta.demo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs text-[#f97316] hover:text-[#fb923c] transition-colors font-medium">
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                            <polyline points="15 3 21 3 21 9" />
-                            <line x1="10" y1="14" x2="21" y2="3" />
-                          </svg>
-                          {projects.liveDemo}
-                        </a>
-                      )}
-                    </div>
-                  }
-                />
-              </motion.div>
-            );
-          })}
-        </div>
+          <ol className="lg:col-span-5 border-t border-white/[0.07]" onKeyDown={onListKey}>
+            {projects.items.map((project, i) => {
+              const meta = projectsMeta[i];
+              const isActive = i === active;
+              return (
+                <li key={project.title} className="relative border-b border-white/[0.07]">
+                  <span
+                    aria-hidden
+                    className={`absolute -left-3 lg:-left-4 top-4 h-11 w-0.5 bg-[#f97316] origin-top transition-transform duration-300 ease-out ${
+                      isActive ? "scale-y-100" : "scale-y-0"
+                    }`}
+                  />
+                  <button
+                    ref={(el) => {
+                      rowRefs.current[i] = el;
+                    }}
+                    type="button"
+                    aria-expanded={isActive}
+                    aria-controls={`proyectos-visor proyecto-${i}`}
+                    onClick={() => select(i)}
+                    onFocus={(e) => {
+                      if (e.currentTarget.matches(":focus-visible")) setActive(i);
+                    }}
+                    onMouseEnter={() => hoverIn(i)}
+                    onMouseLeave={clearHover}
+                    className={`group grid w-full grid-cols-[2.25rem_minmax(0,1fr)] gap-x-3 py-4 pr-1 text-left cursor-pointer ${FOCUS_RING}`}
+                  >
+                    <span
+                      className={`font-mono text-xs tabular-nums pt-1 transition-colors ${
+                        isActive ? "text-[#f97316]" : "text-[#857e77]"
+                      }`}
+                    >
+                      {num(i)}
+                    </span>
+                    <span className="min-w-0">
+                      <span className="flex items-baseline justify-between gap-3">
+                        <span
+                          className={`text-[17px] font-semibold tracking-[-0.01em] transition-colors ${
+                            isActive ? "text-white" : "text-[#d8d2ca] group-hover:text-white"
+                          }`}
+                        >
+                          {project.title}
+                        </span>
+                        <span
+                          className={`hidden lg:inline shrink-0 font-mono text-[11px] transition-colors ${
+                            isActive ? "text-[#f97316]" : "text-[#857e77]"
+                          }`}
+                        >
+                          {project.kind}
+                        </span>
+                      </span>
+                      <span
+                        className={`block text-[13px] mt-1 transition-colors ${
+                          isActive ? "text-[#a09890]" : "text-[#857e77]"
+                        }`}
+                      >
+                        {project.subtitle}
+                      </span>
+                    </span>
+                  </button>
 
-        <div className="flex justify-center gap-2 mt-8">
-          {projects.items.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => scrollTo(i)}
-              aria-label={`Ir al proyecto ${i + 1}`}
-              className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                activeIndex === i ? "w-6 bg-[#f97316]" : "w-1.5 bg-white/20 hover:bg-white/40"
-              }`}
-            />
-          ))}
-        </div>
+                  {/* Móvil y tablet: el proyecto se abre debajo de su fila */}
+                  <div id={`proyecto-${i}`} hidden={!isActive} className="lg:hidden pb-7 pl-[3rem]">
+                    {isActive && (
+                      <>
+                        <div className="relative aspect-[16/10] mb-4 rounded-xl overflow-hidden border border-white/[0.07] bg-[#121212]">
+                          {meta.video ? (
+                            <video
+                              src={meta.video}
+                              autoPlay
+                              muted
+                              loop
+                              playsInline
+                              aria-label={project.title}
+                              className="absolute inset-0 h-full w-full object-cover object-top"
+                            />
+                          ) : (
+                            meta.image && (
+                              <img
+                                src={meta.image}
+                                alt={project.title}
+                                decoding="async"
+                                className="absolute inset-0 h-full w-full object-cover object-top"
+                              />
+                            )
+                          )}
+                        </div>
+                        <div className="mb-3">
+                          <Status label={project.status} live={meta.live} />
+                        </div>
+                        <p className="text-[15px] leading-relaxed text-[#a09890] mb-4">{project.description}</p>
+                        <div className="mb-5">
+                          <Tags tags={meta.tags} />
+                        </div>
+                        <Links meta={meta} code={projects.code} liveDemo={projects.liveDemo} />
+                      </>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+
+          {/* Escritorio: visor fijo junto a la lista */}
+          <div id="proyectos-visor" className="hidden lg:block lg:col-span-7">
+            <div className="relative aspect-[16/10] rounded-xl overflow-hidden border border-white/[0.07] bg-[#121212]">
+              {projects.items.map((project, i) => {
+                const meta = projectsMeta[i];
+                const isActive = i === active;
+                if (meta.video) {
+                  return isActive ? (
+                    <video
+                      key={project.title}
+                      src={meta.video}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      aria-label={project.title}
+                      className="absolute inset-0 h-full w-full object-cover object-top"
+                    />
+                  ) : null;
+                }
+                if (!meta.image) return null;
+                return (
+                  <img
+                    key={project.title}
+                    src={meta.image}
+                    alt={isActive ? project.title : ""}
+                    aria-hidden={!isActive}
+                    decoding="async"
+                    className={`absolute inset-0 h-full w-full object-cover object-top transition-opacity duration-300 ease-out ${
+                      isActive ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                );
+              })}
+            </div>
+
+            <motion.div
+              key={active}
+              initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="flex items-center gap-4 mt-6 mb-3">
+                <Status label={current.status} live={currentMeta.live} />
+                <span className="font-mono text-xs text-[#857e77] tabular-nums">
+                  {num(active)} / {num(total - 1)} · {current.kind}
+                </span>
+              </div>
+              <h3 className="text-[26px] font-bold tracking-[-0.02em] text-white mb-3">{current.title}</h3>
+              <p className="text-[15px] leading-relaxed text-[#a09890] mb-3 max-w-[62ch]">{current.description}</p>
+              <p className="text-sm leading-relaxed text-[#8f8881] mb-5 max-w-[62ch]">{current.detail}</p>
+              <div className="mb-6">
+                <Tags tags={currentMeta.tags} />
+              </div>
+              <Links meta={currentMeta} code={projects.code} liveDemo={projects.liveDemo} />
+            </motion.div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
